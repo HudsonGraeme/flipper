@@ -1,0 +1,49 @@
+.flipper-percentage-button {
+  border: none;
+  background-color: transparent;
+}
+
+.flipper-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-grow: 1;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  gap: 1rem;
+}
+
+.flipper-container-error {
+  background-color: rgba(140, 0, 0, 0.3);
+  color: white;
+  height: 1.5rem;
+}
+
+.flipper-error-message {
+  font-size: 14px;
+  margin: 0;
+}
+
+.flipper-error-icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: white;
+  fill: white;
+}
+
+.flipper-cost {
+  margin-top: 1rem;
+}
+
+.flipper-cost-text {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.flipper-tx-link {
+  text-decoration: none;
+  display: inline-block;
+}

@@ -1,0 +1,58 @@
+{
+  "name": "flipper",
+  "description": "Adds convenient price suggestions to OpenSea's UI",
+  "version": "0.0.1",
+  "homepage": "https://github.com/HudsonGraeme/Flipper",
+  "author": "HudsonGraeme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HudsonGraeme/Flipper.git"
+  },
+  "scripts": {
+    "start": "xt-build -e dev -w",
+    "start:firefox": "xt-build -e dev -p firefox -w",
+    "build": "xt-build -e prod",
+    "build:firefox": "xt-build -e prod -p firefox",
+    "clean": "xt-clean",
+    "docs": "xt-docs",
+    "test": "xt-test",
+    "coverage": "nyc --reporter=lcov npm run test",
+    "sync": "xt-sync"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "eslintIgnore": [
+    "test/**/*"
+  ],
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
+    "extension-cli": "latest",
+    "webpack": "^5.74.0"
+  },
+  "xtdocs": {
+    "source": {
+      "include": [
+        "README.md",
+        "src"
+      ]
+    }
+  },
+  "xtbuild": {
+    "js_bundles": [
+      {
+        "name": "index",
+        "src": "./src/**/*.js"
+      }
+    ]
+  },
+  "dependencies": {
+    "chrome-call": "^4.0.1",
+    "date-fns": "^2.29.2",
+    "ethers": "^5.6.9",
+    "ky": "^0.31.1",
+    "lodash": "^4.17.21"
+  }
+}

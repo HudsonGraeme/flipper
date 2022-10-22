@@ -1,0 +1,11 @@
+{
+    "appName": {
+        "message": "Flipper"
+    },
+    "appShortName": {
+        "message": "Flipper"
+    },
+    "appDescription": {
+        "message": "Adds convenient price suggestions to OpenSea's UI"
+    }
+}
