@@ -1,3 +1,7 @@
+> # ⚠️ This is an experimental project and should not be used in mainnet interactions. Please see the [`LICENSE`](https://github.com/hudsongraeme/flipper/blob/main/LICENSE.md)
+>
+> ### This extension is in ALPHA which means it's absolutely unsafe and not fit for use on mainnet. If you choose to use this, I am in no way liable for any bugs (trust me there are a lot), losses, rugs or cosmic bit flips<!-- lol -->.
+
 # Flipper
 
 <!-- Today you learned that HTML comments are supported in markdown -->
