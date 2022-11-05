@@ -37,10 +37,14 @@ const getLastSale = async () => {
     .get(rariURL)
     .json()
     .catch((err) => console.error("Unable to fetch previous sale", err));
+
   if (get(response, "activities.length") === 0) {
     console.error("Flipper: No previous sale found");
     return;
   }
+  const previousBuyer = get(response, "activities.0.buyer", ":unknown")
+    .split(":")[1]
+    .toLowerCase();
   const [previousSale] = response.activities;
   const previousSaleValue = previousSale.payment.value;
   if (previousSale.type && previousSale.type === "ACCEPT_BID") {
@@ -63,6 +67,7 @@ const getLastSale = async () => {
   return {
     totalSpend,
     ...previousSale,
+    buyerAddress: previousBuyer,
   };
 };
 
@@ -104,7 +109,7 @@ const getCollectionFees = () => {
 };
 
 /**
- *
+ * Calculates a new price given the last sale value and percentage the user wants to gain
  * @param {number} lastSaleDec The cost of the last sale in decimal form
  * @param {number} percentageGain The percentage that the user wants to gain by selling this NFT
  */
@@ -131,6 +136,15 @@ const renderUIElements = (error = false, purchaseDetails = null) => {
   const container = document.createElement("div");
   container.classList.add("flipper-container");
 
+  const costDiv = document.createElement("div");
+  const costText = document.createElement("p");
+  const txLink = document.createElement("a");
+  const walletLink = document.createElement("a");
+  const youText = document.createElement("p");
+
+  costDiv.classList.add("flipper-cost");
+  costText.classList.add("flipper-cost-text");
+
   if (error) {
     container.classList.add("flipper-container-error");
     const errorIcon = document.createElement("svg");
@@ -144,22 +158,35 @@ const renderUIElements = (error = false, purchaseDetails = null) => {
     errorMessage.classList.add("flipper-error-message");
     container.appendChild(errorMessage);
   } else {
-    const costDiv = document.createElement("div");
-    const costText = document.createElement("p");
-    const txLink = document.createElement("a");
-    costDiv.classList.add("flipper-cost");
-    costText.classList.add("flipper-cost-text");
+    walletLink.href = new URL(
+      purchaseDetails.buyerAddress,
+      "https://etherscan.io/address/"
+    ).href;
+    walletLink.target = "_blank";
+    walletLink.relList = ["noopener", "noreferrer"];
+    walletLink.classList.add("SellForm--more-options");
+    walletLink.id = "flipper-wallet-link";
+    walletLink.innerText =
+      purchaseDetails.buyerAddress.slice(0, 4) +
+      "..." +
+      purchaseDetails.buyerAddress.slice(
+        purchaseDetails.buyerAddress.length - 4
+      );
+    costDiv.appendChild(walletLink);
     costText.innerText = [
-      "You paid",
+      "paid",
       purchaseDetails.totalSpend,
-      formatDistanceToNow(new Date(purchaseDetails.date), { addSuffix: true }),
+      formatDistanceToNow(new Date(purchaseDetails.date), {
+        addSuffix: true,
+      }),
       "in transaction",
     ].join(" ");
     costDiv.appendChild(costText);
     txLink.href = "https://etherscan.io/tx/" + purchaseDetails.transactionHash;
     txLink.target = "_blank";
     txLink.relList.add("noopener", "noreferrer");
-    txLink.classList.add("SellForm--more-options", "flipper-tx-link");
+    txLink.classList.add("SellForm--more-options");
+    txLink.id = "flipper-tx-link";
     txLink.innerText =
       purchaseDetails.transactionHash.slice(0, 4) +
       "..." +
@@ -195,6 +222,22 @@ const renderUIElements = (error = false, purchaseDetails = null) => {
     });
     container.appendChild(gainDiv);
   }
+
+  const errorDiv = document.createElement("div");
+  errorDiv.classList.add("flipper-container-wallet-error", "flipper-container");
+  errorDiv.style.height = "100%";
+  const errorIcon = document.createElement("svg");
+  errorIcon.classList.add("flipper-error-icon");
+  errorIcon.innerHTML =
+    '<svg width="1.5rem" height="1.5rem" viewBox="0 0 752 752" xmlns="http://www.w3.org/2000/svg"><path d="M376 162.89c-117.92 0-213.11 95.188-213.11 213.11S258.081 589.11 376 589.11 589.11 493.919 589.11 376c-.003907-117.92-95.195-213.11-213.12-213.11zm-.94531 327.72c-12.785 0-23.207-10.418-23.207-23.207 0-12.785 10.418-23.207 23.207-23.207 12.785 0 23.207 10.418 23.207 23.207-.003907 12.785-10.422 23.207-23.207 23.207zm24.625-85.246c0 12.785-10.891 23.207-23.68 23.207-12.785 0-23.68-10.418-23.68-23.207l.003907-121.24c0-12.785 10.891-23.207 23.68-23.207 12.785 0 23.68 10.418 23.68 23.207z"/></svg>';
+  errorDiv.appendChild(errorIcon);
+  const errorMessage = document.createElement("p");
+  errorMessage.innerText =
+    "Flipper Warning: Please ensure the details for the previous transaction shown above are correct. You may need to refresh the page one or more times if the transaction above is incorrect and you have recently made the purchase.";
+  errorMessage.classList.add("flipper-error-message");
+  errorDiv.appendChild(errorMessage);
+  priceDiv.appendChild(errorDiv);
+
   priceInput.addEventListener("input", (e) => {
     const ethGained =
       +e.target.value -

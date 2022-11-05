@@ -21,6 +21,15 @@
   height: 1.5rem;
 }
 
+.flipper-container-wallet-error {
+  background-color: rgba(140, 0, 0, 0.3);
+  color: white;
+  height: 100%;
+  margin: 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 .flipper-error-message {
   font-size: 14px;
   margin: 0;
@@ -35,15 +44,23 @@
 }
 
 .flipper-cost {
+  display: flex;
+  align-items: center;
+  justify-items: start;
+  flex-direction: row;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .flipper-cost-text {
-  display: inline-block;
   margin-right: 0.25rem;
 }
 
-.flipper-tx-link {
-  text-decoration: none;
+#flipper-tx-link {
   display: inline-block;
+}
+
+#flipper-wallet-link {
+  display: inline-block;
+  margin-right: 0.5rem;
 }
